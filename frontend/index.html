@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudDeploy - Government Services</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #0b0c0c;
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .services {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .service {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .service h2 {
+            color: #0b0c0c;
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .service p {
+            color: #505a5f;
+            line-height: 1.6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #505a5f;
+        }
+
+        .error {
+            color: #d4351c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>CloudDeploy</h1>
+            <p class="tagline">Government Digital Services Platform</p>
+        </header>
+
+        <div id="loading" class="loading">Loading services...</div>
+        <div id="services" class="services" style="display:none;"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080';
+
+        async function loadServices() {
+            try {
+                const response = await fetch(`${API_URL}/api/services`);
+                const services = await response.json();
+
+                const servicesDiv = document.getElementById('services');
+                servicesDiv.innerHTML = services.map(service => `
+                    <div class="service">
+                        <h2>${service.name}</h2>
+                        <p>${service.description}</p>
+                    </div>
+                `).join('');
+
+                document.getElementById('loading').style.display = 'none';
+                servicesDiv.style.display = 'grid';
+            } catch (error) {
+                document.getElementById('loading').innerHTML =
+                    '<p class="error">Error loading services. Is the backend running?</p>';
+            }
+        }
+
+        loadServices();
+    </script>
+</body>
+
+</html>

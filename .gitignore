@@ -1,0 +1,16 @@
+# Node
+node_modules/
+npm-debug.log
+
+# Environment
+.env
+
+# macOS
+.DS_Store
+
+# Docker
+.dockerignore
+
+# Terraform
+*.tfstate
+.terraform/
