@@ -13,6 +13,11 @@ CloudDeploy demonstrates production DevOps practices for deploying government di
 - **Backend**: Node.js REST API
 - **Database**: PostgreSQL with persistent storage
 
+**Observability:**
+- **Monitoring**: Prometheus + cAdvisor for metrics collection
+- **Retention**: 15-day time-series data storage
+- **Coverage**: CPU, Memory, Disk I/O, Container health
+
 ## Quick Start
 
 ### Prerequisites
@@ -28,25 +33,82 @@ cd clouddeploy-platform
 # Start all services
 docker compose up -d
 
-# Access application
-open http://localhost
+# Verify deployment
+docker compose ps
+
+# Access services
+open http://localhost              # Application
+open http://localhost:9090         # Prometheus
+open http://localhost:8081         # cAdvisor
 
 # Stop services
 docker compose down
 ```
 
+## Monitoring & Observability
+
+CloudDeploy includes production-grade monitoring infrastructure:
+
+- **Prometheus**: Time-series metrics database with 15-day retention
+- **cAdvisor**: Container metrics collection (CPU, memory, disk I/O)
+
+**Metrics Coverage:**
+- ✅ CPU usage per container
+- ✅ Memory consumption tracking
+- ✅ Disk I/O monitoring
+- ✅ Container health status
+- ⚠️ Network metrics (unavailable on Docker Desktop)
+
+**Access Monitoring:**
+```bash
+# Prometheus UI (metrics & queries)
+http://localhost:9090
+
+# cAdvisor UI (container details)
+http://localhost:8081
+```
+
+See [Monitoring Architecture](docs/monitoring-architecture.md) for complete PromQL query reference and troubleshooting guide.
+
 ## Technology Stack
 
+**Current:**
 - **Containers**: Docker, Docker Compose
-- **Backend**: Node.js, Express.js
-- **Database**: PostgreSQL 18
-- **Frontend**: HTML5, Vanilla JavaScript, NGINX
-- **Infrastructure**: Terraform (planned)
-- **Orchestration**: Kubernetes (planned)
+- **Backend**: Node.js 25, Express.js
+- **Database**: PostgreSQL 18-alpine
+- **Frontend**: HTML5, Vanilla JavaScript, NGINX 1.27
+- **Monitoring**: Prometheus 2.51, cAdvisor 0.47
+
+**Planned:**
+- **Infrastructure**: Terraform (AWS VPC, ECS, RDS)
+- **Orchestration**: Kubernetes (EKS)
+- **CI/CD**: GitHub Actions
+- **Security**: AWS Secrets Manager, WAF, GuardDuty
+
+## Documentation
+
+- [Docker Compose Architecture](docs/docker-compose-architecture.md) - Multi-container orchestration
+- [Dockerfile Decisions](docs/dockerfile-decisions.md) - Container image build strategies
+- [Monitoring Architecture](docs/monitoring-architecture.md) - Prometheus observability stack
 
 ## Project Status
 
-🟢 Active Development
+🟢 **Active Development** - Monitoring infrastructure complete
+
+**Current Phase**: Local development environment with observability  
+**Next Milestone**: AWS production deployment with Terraform
+
+## Roadmap
+
+- [x] Three-tier application architecture
+- [x] Docker containerization
+- [x] Health check implementation
+- [x] Prometheus monitoring stack
+- [ ] Grafana dashboards
+- [ ] AWS infrastructure (Terraform)
+- [ ] Kubernetes deployment (EKS)
+- [ ] CI/CD pipeline (GitHub Actions)
+- [ ] Production security hardening
 
 ## License
 
